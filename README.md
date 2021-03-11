@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# Ameware Group Task
+
+Simple React.js web application with 2 forms.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
