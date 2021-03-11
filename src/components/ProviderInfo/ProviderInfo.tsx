@@ -86,8 +86,7 @@ const ProviderInfo = ({ data }: ProviderInfoProps) => {
     <div>
       <div className="provider-details card">
         <h5 className="card-header">
-          {fullName} {data.licenses.taxonomy.classification}{" "}
-          {data.licenses.taxonomy.specialization}
+          {fullName}
         </h5>
         <div className="card-body">
           <div className="container">
