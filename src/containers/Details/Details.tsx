@@ -5,8 +5,18 @@ import ProviderInfo from "../../components/ProviderInfo";
 import Spinner from "../../components/Spinner";
 import * as api from "../../lib/api";
 
+const styles = {
+  root: {
+    marginTop: 40,
+  },
+  spinnerContainer: {
+    display: "flex",
+    justifyContent: "center",
+  },
+};
+
 export interface DetailsParams {
-    id: string;
+  id: string;
 }
 
 const Details = () => {
@@ -16,16 +26,24 @@ const Details = () => {
   const load = async () => {
     const data = await api.details(id);
     setData(data);
-  }
+  };
 
   useEffect(() => {
     load();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    document.title = 'Details';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   return (
-    <div className="provider-details-container">
-      {data ? <ProviderInfo data={data} /> : <Spinner />}
+    <div className="provider-details-container" style={styles.root}>
+      {data ? (
+        <ProviderInfo data={data} />
+      ) : (
+        <div style={styles.spinnerContainer}>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };

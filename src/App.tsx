@@ -1,24 +1,45 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-
-  Route, Switch
-} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
+import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Details from "./containers/Details";
+import Home from "./containers/Home";
 import Search from "./containers/Search";
-
-function Home() {
-  return <h2>Home</h2>;
-}
+import useDarkMode from "./lib/hooks/useDarkMode";
 
 function App() {
+  const [theme, setTheme] = useState("light");
+  const isDarkMode = useDarkMode();
+
+  useEffect(() => {
+    console.log(theme);
+    if (theme === "dark") {
+      document.body.classList.replace('bg-light', 'bg-dark')
+    }
+    if (theme === "light") {
+      document.body.classList.replace('bg-dark', 'bg-light')
+    }
+  }, [theme])
+
+  useEffect(() => {
+    if (isDarkMode) {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  }, [isDarkMode]);
+
   return (
     <Router>
-      <div className="App">
+      <div
+        className={`App d-flex flex-column ${
+          theme === "dark" ? "bg-dark" : "bg-light"
+        }`}
+      >
         <NavBar />
 
-        <div className="container">
+        <div className="container App-container">
           <Switch>
             <Route path="/search">
               <Search />
@@ -31,6 +52,8 @@ function App() {
             </Route>
           </Switch>
         </div>
+
+        <Footer />
       </div>
     </Router>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SearchResultsResponse } from "../../lib/api";
+import useDarkMode from "../../lib/hooks/useDarkMode";
 import Pagination from "../Pagination";
 import SearchResultItem from "../SearchResultItem";
 
@@ -10,6 +11,7 @@ interface SearchResultListProps {
 
 const SearchResultList = ({ data, pageSize = 10 }: SearchResultListProps) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const isDarkMode = useDarkMode();
   const pageAmount = Math.round(data.data.length / pageSize);
 
   const pageItems = data.data.slice(
@@ -28,7 +30,7 @@ const SearchResultList = ({ data, pageSize = 10 }: SearchResultListProps) => {
           <SearchResultItem key={`item-${item.id}`} item={item} />
         ))}
       </div>
-      <p>{pageItems.length} of {data.total} total</p>
+      <p className={`${isDarkMode ? 'text-light' : 'text-dark'}`}>{pageItems.length} of {data.total} total</p>
       <Pagination number={pageAmount} onChange={handlePageChange} />
     </div>
   );

@@ -1,12 +1,28 @@
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
+import useDarkMode from "../../lib/hooks/useDarkMode";
 import Logo from "../Logo";
 
+const styles = {
+  logo: {
+    marginRight: 10,
+  },
+};
+
 const NavBar = () => {
+  const isSearch = useRouteMatch("/search");
+  const isDetails = useRouteMatch("/details/:id");
+  const isDarkMode = useDarkMode();
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/search">
-          <Logo />
+    <nav
+      className={`navbar navbar-expand-lg ${
+        isDarkMode ? "navbar-dark bg-dark" : "navbar-light bg-light"
+      }`}
+    >
+      <div className="container">
+        <Link className="navbar-brand" to="/">
+          <Logo style={styles.logo} />
+          Ameware Group Task
         </Link>
         <button
           className="navbar-toggler"
@@ -22,12 +38,21 @@ const NavBar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/search">
+              <Link
+                className={`nav-link ${isSearch?.isExact ? "active" : ""}`}
+                aria-current="page"
+                to="/search"
+                title="Search National Provider Identifier data"
+              >
                 Search
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/details/1700104338" title="Show example details for 1700104338">
+              <Link
+                className={`nav-link ${isDetails?.isExact ? "active" : ""}`}
+                to="/details/1700104338"
+                title="Show example details for 1700104338"
+              >
                 Details
               </Link>
             </li>

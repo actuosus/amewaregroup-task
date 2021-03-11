@@ -26,7 +26,7 @@ export interface NationalProvider {
   /**
    * A list of license objects for the provider, each with sub-fields such as issuing states, taxonomy, corresponding medicare provider type, etc. For search, use its specific sub-fields.
    */
-  licenses: License[];
+  licenses: License;
 
   /**
    * The name object (with sub-fields) of the provider. For search, use name.full or other specific sub-fields.

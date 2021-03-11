@@ -181,7 +181,6 @@ export const details = async (
     try {
       // @ts-ignore
       result[field] = JSON.parse(fieldData);
-      console.log(field, JSON.parse(fieldData), fieldData);
     } catch (e) {
       console.warn(`Unable to parse field ${field}`, fieldData);
     }

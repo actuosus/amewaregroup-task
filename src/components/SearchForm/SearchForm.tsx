@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { SearchResult } from "../../@types/SearchResult";
 import * as api from "../../lib/api";
 import useQuery from "../../lib/hooks/useQuery";
 
@@ -10,16 +11,18 @@ interface SearchFormProps {
 }
 
 const limit = 500;
+const autocompleteLimit = 10;
 
 const SearchForm = ({ onResults, onLoadStart, onLoadEnd }: SearchFormProps) => {
   const history = useHistory();
   const q = useQuery();
   const query = q.get("query");
   const [currentQuery, setCurrentQuery] = useState(query);
+  const [dataList, setDataList] = useState<SearchResult[]>([]);
 
   const search = async (query: string | null) => {
     if (query) {
-      history.replace({search: `query=${query}`})
+      history.replace({ search: `query=${query}` });
       onLoadStart();
       const res = await api.search(query, limit);
       onLoadEnd();
@@ -28,7 +31,7 @@ const SearchForm = ({ onResults, onLoadStart, onLoadEnd }: SearchFormProps) => {
         onResults(res);
       }
     }
-  }
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -37,12 +40,27 @@ const SearchForm = ({ onResults, onLoadStart, onLoadEnd }: SearchFormProps) => {
   };
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentQuery(event.target.value);
+    const query = event.target.value;
+    setCurrentQuery(query);
+
+    if (!query) {
+      return;
+    }
+
+    const isSelectedFromDataList = dataList.filter((_) => _.name === query).length;
+
+    if (!isSelectedFromDataList) {
+      api.search(query, autocompleteLimit).then((results) => {
+        setDataList(results.data);
+      });
+    } else {
+      search(query);
+    }
   };
 
   useEffect(() => {
     search(query);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -55,8 +73,20 @@ const SearchForm = ({ onResults, onLoadStart, onLoadEnd }: SearchFormProps) => {
         placeholder="Provider name or NPI"
         aria-label="Provider name or NPI"
         className="form-control me-2"
+        list="autocomplete-list"
       />
-      <button type="submit" className="btn btn-outline-success" disabled={!currentQuery}>
+      {dataList.length ? (
+        <datalist id="autocomplete-list">
+          {dataList.map((_) => (
+            <option key={`autocomplete-list-item-${_.id}`} value={_.name} />
+          ))}
+        </datalist>
+      ) : null}
+      <button
+        type="submit"
+        className="btn btn-outline-success"
+        disabled={!currentQuery}
+      >
         Search
       </button>
     </form>
