@@ -36,23 +36,23 @@ const Pagination = ({ number, onChange}: PaginationProps) => {
     <nav aria-label="Page navigation example">
       <ul className="pagination pagination-sm">
         <li className={`page-item ${selection <= 0 ? 'disabled' : ''}`}>
-          <a className="page-link" onClick={handlePrev}>
+          <button className="page-link" onClick={handlePrev}>
             Previous
-          </a>
+          </button>
         </li>
         {Array(number)
           .fill(null)
           .map((_, i) => (
-            <li className={`page-item ${selection === i ? 'active' : ''}`}>
-              <a className="page-link" onClick={handleChange(i)}>
+            <li key={`page-item-${i}`} className={`page-item ${selection === i ? 'active' : ''}`}>
+              <button className="page-link" onClick={handleChange(i)}>
                 {i + 1}
-              </a>
+              </button>
             </li>
           ))}
         <li className={`page-item ${selection >= number - 1 ? 'disabled' : ''}`}>
-          <a className="page-link" onClick={handleNext}>
+          <button className="page-link" onClick={handleNext}>
             Next
-          </a>
+          </button>
         </li>
       </ul>
     </nav>

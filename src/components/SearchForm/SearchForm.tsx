@@ -41,10 +41,9 @@ const SearchForm = ({ onResults, onLoadStart, onLoadEnd }: SearchFormProps) => {
   };
 
   useEffect(() => {
-    setCurrentQuery(query);
-
     search(query);
-  }, [query]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <form method="GET" onSubmit={handleSubmit} className="d-flex">
